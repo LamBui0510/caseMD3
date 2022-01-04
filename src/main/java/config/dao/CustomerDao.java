@@ -47,7 +47,6 @@ public class CustomerDao {
                 Date create_date = rs.getDate("create_date");
                 Date modify_date = rs.getDate("modify_date");
                 customerList.add(new Customer(id, full_name, name_role, passwords, email, phone, address, img, create_date, modify_date));
-
             }
             return customerList;
         } catch (Exception e) {
@@ -118,5 +117,30 @@ public class CustomerDao {
         }
 
         return null;
+    }
+    public Customer loginCustomer(String email, String passwords){
+        String loginCustomer = "Select * from customer where passwords = ? ,email = ? ";
+        Connection connection = connectionJDBC.getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(loginCustomer);
+            preparedStatement.setString(1,email);
+            preparedStatement.setString(2,passwords);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("id");
+                String name_role = rs.getString("name");
+                String full_name = rs.getString("full_name");
+                String pass_words = rs.getString("passwords");
+                String emails = rs.getString("email");
+                String phone = rs.getString("phone");
+                String address = rs.getString("address");
+                String img = rs.getString("img");
+                Date create_date = rs.getDate("create_date");
+                Date modify_date = rs.getDate("modify_date");
+                return new Customer(id, full_name, name_role, pass_words, emails, phone, address, img, create_date, modify_date));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
